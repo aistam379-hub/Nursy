@@ -1109,69 +1109,6 @@
     /* ============================================================
        STATISTICS
        ============================================================ */
-    .stat-card {
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 18px;
-      cursor: pointer;
-      transition: box-shadow .2s, border-color .2s;
-    }
-    .stat-card:hover { border-color: var(--primary); box-shadow: var(--shadow); }
-    .stat-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 13px;
-      background: var(--primary-light);
-      border: 1.5px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .stat-icon i { font-size: 1.4rem; color: var(--primary); }
-    .stat-value {
-      font-family: 'DM Mono', monospace;
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.1;
-      margin-top: 8px;
-    }
-    .stat-value-small {
-      font-family: 'DM Mono', monospace;
-      font-size: 1.6rem;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.1;
-      margin-top: 8px;
-    }
-    @media (max-width: 640px) {
-      .stat-value { font-size: 1.6rem; }
-      .stat-value-small { font-size: 1.3rem; }
-    }
-    .stat-card h3 { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
-
-    /* Stat card special states */
-    .stat-card.cancelled-shadow {
-      background: var(--red-light) !important;
-      border-color: #fca5a5 !important;
-    }
-    .stat-card.cancelled-shadow .stat-icon {
-      background: rgba(220,38,38,.1) !important;
-      border-color: #fca5a5 !important;
-    }
-    .stat-card.cancelled-shadow .stat-icon i { color: var(--red) !important; }
-
-    .stat-card.repeat-shadow {
-      background: var(--green-light) !important;
-      border-color: #86efac !important;
-    }
-    .stat-card.repeat-shadow .stat-icon {
-      background: rgba(22,163,74,.1) !important;
-      border-color: #86efac !important;
-    }
-    .stat-card.repeat-shadow .stat-icon i { color: var(--green) !important; }
-
     /* Chart */
     .chart-container { height: 240px; position: relative; display: flex; min-width: 480px; }
     .chart-y-axis { display: flex; flex-direction: column; justify-content: space-between; padding: 16px 0; padding-right: 10px; text-align: right; }
@@ -2065,13 +2002,6 @@
           <div class="sidebar-sub">التقويم اليومي</div>
         </div>
       </div>
-      <div class="sidebar-item" id="sidebarStats">
-        <div class="sidebar-icon"><i class="fas fa-chart-pie"></i></div>
-        <div>
-          <div>الإحصائيات</div>
-          <div class="sidebar-sub">تحليلات متقدمة</div>
-        </div>
-      </div>
     </aside>
 
     <!-- Content -->
@@ -2259,167 +2189,6 @@
         </div>
       </section>
 
-      <!-- ========== STATS SECTION ========== -->
-      <section id="statsSection" class="hidden">
-        <div style="display:flex; flex-direction:column; gap:18px;">
-
-          <!-- Stat cards -->
-          <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:14px;" id="statCardsGrid" class="lg:grid-cols-4">
-            <div class="stat-card fade-in" onclick="showStatInfo('totalPatients')">
-              <div style="display:flex; align-items:flex-start; justify-content:space-between;">
-                <div>
-                  <h3>إجمالي المرضى</h3>
-                  <div class="stat-value" id="statActiveUsers">0</div>
-                </div>
-                <div class="stat-icon"><i class="fas fa-users"></i></div>
-              </div>
-            </div>
-            <div class="stat-card fade-in" onclick="showStatInfo('total')">
-              <div style="display:flex; align-items:flex-start; justify-content:space-between;">
-                <div>
-                  <h3>إجمالي الزيارات</h3>
-                  <div class="stat-value" id="statTotalVisits">0</div>
-                </div>
-                <div class="stat-icon"><i class="fas fa-clipboard-list"></i></div>
-              </div>
-            </div>
-            <div class="stat-card cancelled-shadow fade-in" onclick="showStatInfo('cancelled')">
-              <div style="display:flex; align-items:flex-start; justify-content:space-between;">
-                <div>
-                  <h3>المواعيد الملغاة</h3>
-                  <div class="stat-value" id="statCancelled">0</div>
-                </div>
-                <div class="stat-icon"><i class="fas fa-ban"></i></div>
-              </div>
-            </div>
-            <div class="stat-card repeat-shadow fade-in" onclick="showStatInfo('repeat')">
-              <div style="display:flex; align-items:flex-start; justify-content:space-between;">
-                <div>
-                  <h3>نسبة التكرار</h3>
-                  <div class="stat-value-small" id="statConversion">0%</div>
-                </div>
-                <div class="stat-icon"><i class="fas fa-arrow-trend-up"></i></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Chart -->
-          <div class="glass-card">
-            <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
-              <div>
-                <div class="card-title">تحليلات المواعيد</div>
-                <div class="card-subtitle">توزيع المواعيد المؤكدة</div>
-              </div>
-              <div class="card-actions">
-                <button class="card-btn active" onclick="updateChartPeriod('monthly')">شهري</button>
-                <button class="card-btn" onclick="updateChartPeriod('weekly')">أسبوعي</button>
-                <button class="card-btn" onclick="updateChartPeriod('daily')">يومي</button>
-              </div>
-            </div>
-            <div style="overflow-x:auto;">
-              <div class="chart-container" id="appointmentsChartContainer">
-                <div class="chart-y-axis" id="chartYAxis"></div>
-                <div class="chart-placeholder" id="appointmentsChart"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Donut + Recent -->
-          <!-- iOS-style Donuts row -->
-          <div style="display:grid; gap:18px;" id="donutsGrid">
-
-            <!-- Donut 1 — Morning / Evening -->
-            <div class="glass-card" style="display:flex; flex-direction:column; align-items:center; gap:0;">
-              <div style="width:100%; margin-bottom:14px;">
-                <div class="card-title">توزيع الزيارات</div>
-                <div class="card-subtitle">صباحي / مسائي</div>
-              </div>
-              <!-- SVG Donut -->
-              <div style="position:relative; width:160px; height:160px; flex-shrink:0;">
-                <svg width="160" height="160" viewBox="0 0 160 160" style="transform:rotate(-90deg);">
-                  <!-- Track -->
-                  <circle cx="80" cy="80" r="62" stroke="#f0fdfa" stroke-width="16" fill="none"/>
-                  <!-- Morning (amber) -->
-                  <circle id="donut1Seg1" cx="80" cy="80" r="62"
-                    stroke="#f59e0b" stroke-width="16" fill="none"
-                    stroke-linecap="round"
-                    stroke-dasharray="0 389.6" stroke-dashoffset="0"
-                    style="transition:stroke-dasharray .8s cubic-bezier(.4,0,.2,1);"/>
-                  <!-- Evening (blue) -->
-                  <circle id="donut1Seg2" cx="80" cy="80" r="62"
-                    stroke="#6366f1" stroke-width="16" fill="none"
-                    stroke-linecap="round"
-                    stroke-dasharray="0 389.6" stroke-dashoffset="0"
-                    style="transition:stroke-dasharray .8s cubic-bezier(.4,0,.2,1) .05s, stroke-dashoffset .8s cubic-bezier(.4,0,.2,1) .05s;"/>
-                </svg>
-                <!-- Center label -->
-                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
-                  <div id="donut1Total" style="font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:700;color:var(--text);line-height:1;">0</div>
-                  <div style="font-size:.65rem;color:var(--text-muted);margin-top:2px;font-weight:600;">زيارة</div>
-                </div>
-              </div>
-              <!-- Legend -->
-              <div id="donut1Legend" style="width:100%;display:flex;flex-direction:column;gap:10px;margin-top:18px;"></div>
-            </div>
-
-            <!-- Donut 2 — Online / Manual -->
-            <div class="glass-card" style="display:flex; flex-direction:column; align-items:center; gap:0;">
-              <div style="width:100%; margin-bottom:14px;">
-                <div class="card-title">مصدر الحجز</div>
-                <div class="card-subtitle">أونلاين / يدوي</div>
-              </div>
-              <!-- SVG Donut -->
-              <div style="position:relative; width:160px; height:160px; flex-shrink:0;">
-                <svg width="160" height="160" viewBox="0 0 160 160" style="transform:rotate(-90deg);">
-                  <!-- Track -->
-                  <circle cx="80" cy="80" r="62" stroke="#f0fdf4" stroke-width="16" fill="none"/>
-                  <!-- Online (green) -->
-                  <circle id="donut2Seg1" cx="80" cy="80" r="62"
-                    stroke="#22c55e" stroke-width="16" fill="none"
-                    stroke-linecap="round"
-                    stroke-dasharray="0 389.6" stroke-dashoffset="0"
-                    style="transition:stroke-dasharray .8s cubic-bezier(.4,0,.2,1);"/>
-                  <!-- Manual (red/rose) -->
-                  <circle id="donut2Seg2" cx="80" cy="80" r="62"
-                    stroke="#f43f5e" stroke-width="16" fill="none"
-                    stroke-linecap="round"
-                    stroke-dasharray="0 389.6" stroke-dashoffset="0"
-                    style="transition:stroke-dasharray .8s cubic-bezier(.4,0,.2,1) .05s, stroke-dashoffset .8s cubic-bezier(.4,0,.2,1) .05s;"/>
-                </svg>
-                <!-- Center label -->
-                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;">
-                  <div id="donut2Total" style="font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:700;color:var(--text);line-height:1;">0</div>
-                  <div style="font-size:.65rem;color:var(--text-muted);margin-top:2px;font-weight:600;">موعد</div>
-                </div>
-              </div>
-              <!-- Legend -->
-              <div id="donut2Legend" style="width:100%;display:flex;flex-direction:column;gap:10px;margin-top:18px;"></div>
-            </div>
-
-          </div>
-
-          <!-- Recent visits -->
-          <div class="glass-card">
-            <div style="margin-bottom:16px;">
-              <div class="card-title">أحدث الزيارات</div>
-              <div class="card-subtitle">آخر 30 زيارة</div>
-            </div>
-            <div class="scrollable-visits">
-              <table>
-                <thead>
-                  <tr>
-                    <th>المريض</th>
-                    <th>النوع</th>
-                    <th>التاريخ</th>
-                  </tr>
-                </thead>
-                <tbody id="recentAppointmentsTable"></tbody>
-              </table>
-            </div>
-          </div>
-
-        </div>
-      </section>
     </div>
   </div>
 
@@ -2459,9 +2228,6 @@
     </div>
     <div class="bottom-nav-item" id="mobileCalendar">
       <i class="fas fa-calendar-alt"></i><span>الروزنامة</span>
-    </div>
-    <div class="bottom-nav-item" id="mobileStats">
-      <i class="fas fa-chart-pie"></i><span>إحصائيات</span>
     </div>
   </nav>
 
@@ -3180,7 +2946,6 @@
           updateCounts(); calculateDensity(); renderCalendar();
           if (selectedDayStr) renderAgendaForDay(selectedDayStr);
           if (currentSection === 'appointments') renderBothAppointmentColumns();
-          if (currentSection === 'stats') { updateStats(false); renderChart(); }
         });
 
         // ── 2. Real-time listener: المرضى ──
@@ -3386,9 +3151,9 @@
         appointments: ['sidebarAppointments','mobileAppointments','appointmentsSection'],
         patients:     ['sidebarPatients','mobilePatients','patientBookSection'],
         calendar:     ['sidebarCalendar','mobileCalendar','calendarSection'],
-        stats:        ['sidebarStats','mobileStats','statsSection'],
+
       };
-      const allSections = ['appointmentsSection','patientBookSection','calendarSection','statsSection'];
+      const allSections = ['appointmentsSection','patientBookSection','calendarSection'];
       allSections.forEach(s=>document.getElementById(s)?.classList.add('hidden'));
       const [side, mob, sec] = sectionMap[section] || [];
       document.getElementById(side)?.classList.add('active');
@@ -3397,7 +3162,6 @@
       if (section==='appointments' && !skipApptContent) renderBothAppointmentColumns();
       if (section==='patients')     renderPatientBook();
       if (section==='calendar') { renderCalendar(); renderAgendaForDay(selectedDayStr); updateDayStatusBadge(selectedDayStr); }
-      if (section==='stats') { updateStats(true); }
     }
     window.goToManualForm = function() {
       if (window.innerWidth >= 768) {
@@ -4335,335 +4099,7 @@
       setActiveSection('appointments');
     });
 
-    // ================== Statistics ==================
-    function calculateStatsFromPatients() {
-      let totalVisits=0, activeCount=0, morningCount=0, eveningCount=0, repeatPatients=0;
-      const totalPatients=Object.keys(allPatients).length;
-      let allVisits=[];
-      Object.values(allPatients).forEach(patient=>{
-        totalVisits += patient.totalVisits||0;
-        if(patient.totalVisits>1) repeatPatients++;
-        if(patient.lastVisit&&patient.lastVisit>=thirtyDaysAgoStr) activeCount++;
-        if(patient.appointments){
-          patient.appointments.forEach(v=>{
-            if(v.slot==='Morning') morningCount++;
-            else if(v.slot==='Evening') eveningCount++;
-            allVisits.push({patientName:patient.name, date:v.date, visitType:v.visitType});
-          });
-        }
-      });
-      allVisits.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
-      const recentVisits=allVisits.slice(0,30);
-      const repeatRate=totalPatients?((repeatPatients/totalPatients)*100).toFixed(1):0;
-      return {totalVisits,activeCount,repeatRate,morningCount,eveningCount,recentVisits};
-    }
-    function calculateCancelledAppointments() {
-      return allRecords.filter(r=>r.Status==='Cancelled'||r.Status==='Rejected').length;
-    }
-
-    // ── iOS-style donut renderer ──
-    const DONUT_C = 389.6; // 2π × 62
-    const DONUT_GAP = 8;
-    function animateDonut(seg1Id, seg2Id, totalId, legendId, val1, val2, color1, color2, label1, label2, suffix='', animate=true) {
-      const total = val1 + val2;
-      const seg1El = document.getElementById(seg1Id);
-      const seg2El = document.getElementById(seg2Id);
-      const totalEl = document.getElementById(totalId);
-      const legendEl = document.getElementById(legendId);
-      if (!seg1El || !seg2El) return;
-
-      const arc1 = total ? Math.max(0, (val1 / total) * DONUT_C - DONUT_GAP) : 0;
-      const arc2 = total ? Math.max(0, (val2 / total) * DONUT_C - DONUT_GAP) : 0;
-      const pct1 = total ? ((val1 / total) * 100).toFixed(1) : 0;
-      const pct2 = total ? ((val2 / total) * 100).toFixed(1) : 0;
-
-      if (animate) {
-        seg1El.setAttribute('stroke-dasharray', '0 ' + DONUT_C);
-        seg2El.setAttribute('stroke-dasharray', '0 ' + DONUT_C);
-        seg2El.setAttribute('stroke-dashoffset', '0');
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          seg1El.setAttribute('stroke-dasharray', `${arc1} ${DONUT_C}`);
-          seg2El.setAttribute('stroke-dasharray', `${arc2} ${DONUT_C}`);
-          seg2El.setAttribute('stroke-dashoffset', -(arc1 + DONUT_GAP));
-        }));
-        animateNumber(totalEl, total, suffix, 700);
-      } else {
-        seg1El.setAttribute('stroke-dasharray', `${arc1} ${DONUT_C}`);
-        seg2El.setAttribute('stroke-dasharray', `${arc2} ${DONUT_C}`);
-        seg2El.setAttribute('stroke-dashoffset', -(arc1 + DONUT_GAP));
-        if (totalEl) totalEl.textContent = total + suffix;
-      }
-
-      if (legendEl) {
-        legendEl.innerHTML = [
-          { color: color1, label: label1, val: val1, pct: pct1 },
-          { color: color2, label: label2, val: val2, pct: pct2 }
-        ].map((item, i) => `
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;
-            opacity:${animate?0:1};transition:opacity .4s ease ${animate?(.55+i*.15):0}s;" class="legend-item">
-            <div style="display:flex;align-items:center;gap:9px;">
-              <div style="width:10px;height:10px;border-radius:50%;background:${item.color};flex-shrink:0;
-                box-shadow:0 0 0 3px ${item.color}28;"></div>
-              <span style="font-size:.82rem;font-weight:600;color:var(--text);">${item.label}</span>
-            </div>
-            <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'DM Mono',monospace;font-size:.82rem;font-weight:700;color:var(--text);">${item.val}</span>
-              <span style="font-size:.72rem;padding:2px 8px;border-radius:20px;font-weight:700;
-                background:${item.color}18;color:${item.color};">${item.pct}%</span>
-            </div>
-          </div>`).join('');
-        if (animate) setTimeout(() => legendEl.querySelectorAll('.legend-item').forEach(el => el.style.opacity='1'), 50);
-      }
-    }
-
-    function updateStats(useAnimation=true) {
-      const stats=calculateStatsFromPatients();
-      const cancelled=calculateCancelledAppointments();
-      const totalPatientsCount = Object.keys(allPatients).length;
-      const activeEl=document.getElementById('statActiveUsers');
-      const totalVisitsEl=document.getElementById('statTotalVisits');
-      const cancelledEl=document.getElementById('statCancelled');
-      const repeatEl=document.getElementById('statConversion');
-
-      if(useAnimation) {
-        // ── 1. Stat cards stagger pop-in ──
-        document.querySelectorAll('#statsSection .stat-card').forEach((card, i) => {
-          card.style.opacity = '0';
-          card.style.transform = 'translateY(18px) scale(.97)';
-          card.style.transition = 'none';
-          setTimeout(() => {
-            card.style.transition = 'opacity .4s ease, transform .4s cubic-bezier(.34,1.56,.64,1)';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0) scale(1)';
-          }, i * 80);
-        });
-
-        // ── 2. Number counters (staggered start) ──
-        setTimeout(() => animateNumber(activeEl, totalPatientsCount, '', 700), 100);
-        setTimeout(() => animateNumber(totalVisitsEl, stats.totalVisits, '', 700), 180);
-        setTimeout(() => animateNumber(cancelledEl, cancelled, '', 700), 260);
-        setTimeout(() => animateNumber(repeatEl, parseFloat(stats.repeatRate), '%', 700), 340);
-
-        // ── 3. Donut charts ──
-        const C = DONUT_C;
-        const GAP = DONUT_GAP;
-
-        // Count booking sources from accepted appointments
-        const onlineCount  = allRecords.filter(r => r.Status==='Accepted' && (!r.source || r.source==='online')).length;
-        const manualCount  = allRecords.filter(r => r.Status==='Accepted' && r.source==='manual').length;
-
-        const totalSlot = stats.morningCount + stats.eveningCount;
-
-        animateDonut('donut1Seg1','donut1Seg2','donut1Total','donut1Legend',
-          stats.morningCount, stats.eveningCount,
-          '#f59e0b','#6366f1','صباحي','مسائي');
-
-        setTimeout(() => animateDonut('donut2Seg1','donut2Seg2','donut2Total','donut2Legend',
-          onlineCount, manualCount,
-          '#22c55e','#f43f5e','أونلاين','يدوي'), 120);
-
-        // ── 4. Recent visits table rows fade in ──
-        const tbody = document.getElementById('recentAppointmentsTable');
-        const rows = stats.recentVisits.length
-          ? stats.recentVisits.map(v => `<tr style="opacity:0;transition:opacity .3s ease, transform .3s ease;transform:translateX(8px);">
-              <td style="padding:7px 8px;border-bottom:1px solid var(--bg);">${escapeHtml(v.patientName)}</td>
-              <td style="padding:7px 8px;border-bottom:1px solid var(--bg);">${v.visitType||'-'}</td>
-              <td style="padding:7px 8px;border-bottom:1px solid var(--bg);">${formatDateAr(v.date)}</td>
-            </tr>`).join('')
-          : '<tr><td colspan="3" style="text-align:center;padding:16px;color:var(--text-muted);">لا توجد زيارات</td></tr>';
-        tbody.innerHTML = rows;
-        tbody.querySelectorAll('tr').forEach((row, i) => {
-          setTimeout(() => { row.style.opacity='1'; row.style.transform='translateX(0)'; }, 400 + i * 40);
-        });
-
-        // ── 5. Glass cards (chart + donut + recent) fade up ──
-        document.querySelectorAll('#statsSection .glass-card').forEach((card, i) => {
-          card.style.opacity = '0';
-          card.style.transform = 'translateY(14px)';
-          card.style.transition = 'none';
-          setTimeout(() => {
-            card.style.transition = 'opacity .45s ease, transform .45s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-          }, 200 + i * 100);
-        });
-
-        renderChart(true); // animated chart bars
-
-      } else {
-        // No animation (background refresh)
-        activeEl.textContent = totalPatientsCount;
-        totalVisitsEl.textContent = stats.totalVisits;
-        cancelledEl.textContent = cancelled;
-        repeatEl.textContent = stats.repeatRate + '%';
-        const totalSlot = stats.morningCount + stats.eveningCount;
-        const onlineCount2  = allRecords.filter(r => r.Status==='Accepted' && (!r.source || r.source==='online')).length;
-        const manualCount2  = allRecords.filter(r => r.Status==='Accepted' && r.source==='manual').length;
-        animateDonut('donut1Seg1','donut1Seg2','donut1Total','donut1Legend',
-          stats.morningCount, stats.eveningCount, '#f59e0b','#6366f1','صباحي','مسائي','',false);
-        animateDonut('donut2Seg1','donut2Seg2','donut2Total','donut2Legend',
-          onlineCount2, manualCount2, '#22c55e','#f43f5e','أونلاين','يدوي','',false);
-        const tbody = document.getElementById('recentAppointmentsTable');
-        tbody.innerHTML = stats.recentVisits.length
-          ? stats.recentVisits.map(v => `<tr><td style="padding:7px 8px;border-bottom:1px solid var(--bg);">${escapeHtml(v.patientName)}</td><td style="padding:7px 8px;border-bottom:1px solid var(--bg);">${v.visitType||'-'}</td><td style="padding:7px 8px;border-bottom:1px solid var(--bg);">${formatDateAr(v.date)}</td></tr>`).join('')
-          : '<tr><td colspan="3" style="text-align:center;padding:16px;color:var(--text-muted);">لا توجد زيارات</td></tr>';
-        renderChart(false);
-      }
-    }
-    function animateNumber(element, target, suffix='', duration=700) {
-      if(!element) return;
-      const isFloat = !Number.isInteger(target);
-      const startTime = performance.now();
-      const step = (now) => {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        // ease-out cubic
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const current = target * eased;
-        element.textContent = isFloat ? current.toFixed(1) + suffix : Math.floor(current) + suffix;
-        if (progress < 1) requestAnimationFrame(step);
-        else element.textContent = (isFloat ? parseFloat(target).toFixed(1) : target) + suffix;
-      };
-      requestAnimationFrame(step);
-    }
-    function renderChart(animate=false) {
-      const chartContainer=document.getElementById('appointmentsChart');
-      const yAxis=document.getElementById('chartYAxis');
-      if(!chartContainer) return;
-      const months=monthsAr, weeks=['الأسبوع 1','الأسبوع 2','الأسبوع 3','الأسبوع 4'], days=daysAr;
-      let labels=months, data=Array(12).fill(0), periods=[];
-      const accepted=allRecords.filter(r=>r.Status==='Accepted');
-      const now=new Date(), currentYear=now.getFullYear(), currentMonth=now.getMonth();
-      const firstDayOfMonth=new Date(currentYear,currentMonth,1);
-      const lastDayOfMonth=new Date(currentYear,currentMonth+1,0);
-      const daysInMonth=lastDayOfMonth.getDate();
-      if(currentChartPeriod==='weekly'){
-        labels=weeks; data=Array(4).fill(0); periods=[];
-        for(let week=0;week<4;week++){
-          const startDay=week*7+1, endDay=Math.min((week+1)*7,daysInMonth);
-          const startDate=toLocalISODate(new Date(currentYear,currentMonth,startDay));
-          const endDate=toLocalISODate(new Date(currentYear,currentMonth,endDay));
-          periods.push({label:`الأسبوع ${week+1}`,start:startDate,end:endDate});
-        }
-        accepted.forEach(record=>{
-          const recordDate=parseLocalISODate(normalizeDate(record.Date));
-          if(recordDate>=firstDayOfMonth&&recordDate<=lastDayOfMonth){
-            const day=recordDate.getDate(), weekNum=Math.floor((day-1)/7);
-            if(weekNum>=0&&weekNum<4) data[weekNum]++;
-          }
-        });
-      } else if(currentChartPeriod==='daily'){
-        labels=days; data=Array(7).fill(0); periods=[];
-        const firstDayOfWeek=new Date(now); firstDayOfWeek.setDate(now.getDate()-now.getDay()); firstDayOfWeek.setHours(0,0,0,0);
-        for(let d=0;d<7;d++){
-          const dayDate=new Date(firstDayOfWeek); dayDate.setDate(firstDayOfWeek.getDate()+d);
-          periods.push({label:daysAr[d],date:toLocalISODate(dayDate)});
-        }
-        accepted.forEach(record=>{
-          const recordDate=parseLocalISODate(normalizeDate(record.Date));
-          const diffDays=Math.floor((recordDate-firstDayOfWeek)/(1000*60*60*24));
-          if(diffDays>=0&&diffDays<7) data[diffDays]++;
-        });
-      } else {
-        labels=months; data=Array(12).fill(0); periods=months.map((m,idx)=>({label:m,month:idx}));
-        accepted.forEach(record=>{ const month=parseLocalISODate(normalizeDate(record.Date)).getMonth(); data[month]++; });
-      }
-      const maxValue=Math.max(...data,1);
-      yAxis.innerHTML='';
-      for(let i=5;i>=0;i--){
-        const value=Math.round((maxValue/5)*i);
-        yAxis.innerHTML+=`<span class="y-value">${value}</span>`;
-      }
-      chartContainer.innerHTML=labels.map((label,index)=>{
-        const height=(data[index]/maxValue)*190;
-        const isMax = data[index]===maxValue && data[index]>0;
-        const barStyle = isMax
-          ? 'background:linear-gradient(180deg,#f59e0b,#d97706);box-shadow:0 0 12px rgba(245,158,11,.45);'
-          : 'background:linear-gradient(180deg,var(--primary),var(--primary-hover));';
-        const animStyle = animate ? `height:0px;transition:height .6s cubic-bezier(.4,0,.2,1) ${index*40}ms;` : `height:${height}px;`;
-        return `<div class="chart-bar-group" onclick="showColumnDetails(${index})">
-          <div class="chart-bar" style="${animStyle}${barStyle}" data-h="${height}"></div>
-          <span class="chart-label">${label.substring(0,3)}</span>
-        </div>`;
-      }).join('');
-      if (animate) {
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          chartContainer.querySelectorAll('.chart-bar').forEach(bar => {
-            bar.style.height = bar.dataset.h + 'px';
-          });
-        }));
-      }
-      window.__chartData={periods,data,currentChartPeriod};
-    }
-
-    window.showColumnDetails=function(index){
-      const chartData=window.__chartData; if(!chartData) return;
-      const period=chartData.periods[index]; if(!period) return;
-      let total=0,morning=0,evening=0,cancelledCount=0;
-      const accepted=allRecords.filter(r=>r.Status==='Accepted');
-      const cancelled=allRecords.filter(r=>r.Status==='Cancelled'||r.Status==='Rejected');
-      let title='';
-      if(chartData.currentChartPeriod==='monthly'){
-        const month=period.month;
-        total=accepted.filter(r=>parseLocalISODate(normalizeDate(r.Date)).getMonth()===month).length;
-        morning=accepted.filter(r=>parseLocalISODate(normalizeDate(r.Date)).getMonth()===month&&(r.Slot||'Morning')==='Morning').length;
-        evening=accepted.filter(r=>parseLocalISODate(normalizeDate(r.Date)).getMonth()===month&&(r.Slot||'Evening')==='Evening').length;
-        cancelledCount=cancelled.filter(r=>parseLocalISODate(normalizeDate(r.Date)).getMonth()===month).length;
-        title=`تفاصيل شهر ${period.label}`;
-      } else if(chartData.currentChartPeriod==='weekly'){
-        const start=period.start, end=period.end;
-        total=accepted.filter(r=>normalizeDate(r.Date)>=start&&normalizeDate(r.Date)<=end).length;
-        morning=accepted.filter(r=>normalizeDate(r.Date)>=start&&normalizeDate(r.Date)<=end&&(r.Slot||'Morning')==='Morning').length;
-        evening=accepted.filter(r=>normalizeDate(r.Date)>=start&&normalizeDate(r.Date)<=end&&(r.Slot||'Evening')==='Evening').length;
-        cancelledCount=cancelled.filter(r=>normalizeDate(r.Date)>=start&&normalizeDate(r.Date)<=end).length;
-        title=`تفاصيل ${period.label}`;
-      } else {
-        const date=period.date;
-        total=accepted.filter(r=>normalizeDate(r.Date)===date).length;
-        morning=accepted.filter(r=>normalizeDate(r.Date)===date&&(r.Slot||'Morning')==='Morning').length;
-        evening=accepted.filter(r=>normalizeDate(r.Date)===date&&(r.Slot||'Evening')==='Evening').length;
-        cancelledCount=cancelled.filter(r=>normalizeDate(r.Date)===date).length;
-        title=`تفاصيل ${period.label} ${formatDateAr(date)}`;
-      }
-      document.getElementById('statInfoTitle').textContent=title;
-      document.getElementById('statInfoDescription').innerHTML=`
-        <div style="display:flex;flex-direction:column;gap:12px;">
-          <div style="background:var(--primary-light);border-radius:var(--radius-sm);padding:14px;text-align:center;">
-            <p style="font-size:.82rem;color:var(--text-muted);">إجمالي المواعيد</p>
-            <p style="font-size:2rem;font-weight:800;color:var(--text);font-family:'DM Mono',monospace;">${total}</p>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <div style="background:var(--amber-light);border-radius:var(--radius-sm);padding:12px;text-align:center;">
-              <p style="font-size:.78rem;color:var(--text-muted);">صباحاً</p>
-              <p style="font-size:1.6rem;font-weight:800;color:var(--text);font-family:'DM Mono',monospace;">${morning}</p>
-            </div>
-            <div style="background:#eff6ff;border-radius:var(--radius-sm);padding:12px;text-align:center;">
-              <p style="font-size:.78rem;color:var(--text-muted);">مساءً</p>
-              <p style="font-size:1.6rem;font-weight:800;color:var(--text);font-family:'DM Mono',monospace;">${evening}</p>
-            </div>
-          </div>
-          <div style="background:var(--red-light);border-radius:var(--radius-sm);padding:12px;text-align:center;">
-            <p style="font-size:.78rem;color:var(--text-muted);">المواعيد الملغاة</p>
-            <p style="font-size:1.6rem;font-weight:800;color:var(--red);font-family:'DM Mono',monospace;">${cancelledCount}</p>
-          </div>
-        </div>`;
-      document.getElementById('statInfoModal').classList.remove('hidden');
-    };
-
-    window.updateChartPeriod=function(period){
-      currentChartPeriod=period;
-      document.querySelectorAll('#statsSection .card-actions .card-btn').forEach(btn=>btn.classList.remove('active'));
-      event.target.classList.add('active');
-      renderChart(true);
-    };
-
-    window.showStatInfo=function(type){
-      const titleMap={active:'المرضى النشطين',totalPatients:'إجمالي المرضى',total:'إجمالي الزيارات',cancelled:'المواعيد الملغاة',repeat:'نسبة التكرار'};
-      const descMap={active:'عدد المرضى الذين قاموا بزيارة واحدة على الأقل خلال آخر 30 يوم.',totalPatients:'إجمالي عدد المرضى المسجلين في دفتر المرضى.',total:'مجموع كل الزيارات المسجلة في دفتر المرضى.',cancelled:'عدد المواعيد التي تم إلغاؤها أو رفضها.',repeat:'النسبة المئوية للمرضى الذين زاروا العيادة أكثر من مرة.'};
-      document.getElementById('statInfoTitle').textContent=titleMap[type]||'معلومات';
-      document.getElementById('statInfoDescription').innerHTML=`<p style="color:var(--text-2);line-height:1.7;">${descMap[type]||''}</p>`;
-      document.getElementById('statInfoModal').classList.remove('hidden');
-    };
+    // ================== Statistics ==================;
     window.closeStatInfoModal=function(){ document.getElementById('statInfoModal').classList.add('hidden'); };
 
     window.showDayDetails=function(){
@@ -4733,11 +4169,9 @@
       // sidebarAppointments يستخدم onclick مباشرة الآن
       document.getElementById('sidebarPatients').addEventListener('click',()=>setActiveSection('patients'));
       document.getElementById('sidebarCalendar').addEventListener('click',()=>setActiveSection('calendar'));
-      document.getElementById('sidebarStats').addEventListener('click',()=>setActiveSection('stats'));
       // mobileAppointments يستخدم onclick مباشرة الآن
       document.getElementById('mobilePatients').addEventListener('click',()=>setActiveSection('patients'));
       document.getElementById('mobileCalendar').addEventListener('click',()=>setActiveSection('calendar'));
-      document.getElementById('mobileStats').addEventListener('click',()=>setActiveSection('stats'));
 
       document.getElementById('appointmentsPendingTab').addEventListener('click',()=>setAppointmentsTab('pending'));
       document.getElementById('appointmentsAcceptedTab').addEventListener('click',()=>setAppointmentsTab('accepted'));
