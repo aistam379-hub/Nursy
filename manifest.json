@@ -1,0 +1,36 @@
+{
+  "name": "DocBook - لوحة الممرضة",
+  "short_name": "DocBook",
+  "description": "تطبيق إدارة المواعيد والمرضى",
+  "start_url": "./nurse.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0d9488",
+  "theme_color": "#0d9488",
+  "lang": "ar",
+  "dir": "rtl",
+  "categories": ["medical", "health"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "المواعيد",
+      "short_name": "مواعيد",
+      "description": "عرض المواعيد اليومية",
+      "url": "./nurse.html#appointments",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
