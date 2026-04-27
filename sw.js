@@ -1,18 +1,18 @@
-const CACHE_NAME = 'docbook-v1';
+const CACHE_NAME = 'docbook-v2';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
-  'https://cdn.tailwindcss.com',
-  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-  'https://unpkg.com/lucide@latest/dist/umd/lucide.min.js'
+  './icons/icon-192.png',
+  './icons/icon-512.png'
 ];
 
 // Install Service Worker
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
+      return cache.addAll(ASSETS).catch(err => console.log('Caching assets failed:', err));
     })
   );
 });
@@ -26,13 +26,18 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+  return self.clients.claim();
 });
 
 // Fetching assets
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
+      return response || fetch(event.request).catch(() => {
+          if (event.request.mode === 'navigate') {
+              return caches.match('./index.html');
+          }
+      });
     })
   );
 });
