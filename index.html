@@ -2030,16 +2030,10 @@
   .input-icon.show-pass .eye-closed { display: block; }
 </style>
 
-  <!-- PWA Meta Tags -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0d9488">
-  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="DocBook">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-72.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-72.png">
 </head>
 
 <body>
@@ -5513,26 +5507,27 @@
 </script>
 
 
-  <!-- Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js', { scope: './' })
-          .then(reg => {
-            console.log('Service Worker registered with scope:', reg.scope);
-          })
-          .catch(err => {
-            console.error('Service Worker registration failed:', err);
-          });
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log('SW Registered'))
+          .catch(err => console.log('SW Failed', err));
       });
     }
-    
-    // Catch the install prompt to show it manually if needed (optional)
-    let deferredPrompt;
+
     window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      console.log('PWA Install prompt is ready');
+      console.log('PWA is ready to install!');
+      // Optional: Show a custom message to the user
+      const installMsg = document.createElement('div');
+      installMsg.style.cssText = 'position:fixed; bottom:80px; left:20px; right:20px; background:#0d9488; color:white; padding:15px; border-radius:10px; z-index:10000; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.2);';
+      installMsg.innerHTML = '✨ التطبيق جاهز للتثبيت على جهازك! <br> <button id="doInstall" style="background:white; color:#0d9488; border:none; padding:5px 15px; border-radius:5px; margin-top:10px; font-weight:bold;">تثبيت الآن</button>';
+      document.body.appendChild(installMsg);
+      
+      document.getElementById('doInstall').addEventListener('click', () => {
+        e.prompt();
+        installMsg.remove();
+      });
     });
   </script>
 </body>
